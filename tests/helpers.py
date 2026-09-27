@@ -4,6 +4,8 @@ Shared test doubles for building TicTacToe instances without a real Tk window.
 TicTacToe.__init__ builds GUI widgets, so tests create instances with
 object.__new__ and attach lightweight stubs instead.
 """
+import time
+
 from main import TicTacToe
 
 
@@ -65,3 +67,11 @@ def make_game(mode="PVP", human_mark="X", computer_mark="O", difficulty="medium"
     game.difficulty_var = StubVar(difficulty)
     game.first_var = StubVar(first)
     return game
+
+
+def pump_events(root, ms):
+    """Process Tk events for `ms` milliseconds so after() callbacks can fire."""
+    end = time.monotonic() + ms / 1000
+    while time.monotonic() < end:
+        root.update()
+        time.sleep(0.01)

@@ -1,5 +1,7 @@
 # Tic-Tac-Toe
 
+[![Tests](https://github.com/OlegShotyk/TicTacToe/actions/workflows/tests.yml/badge.svg)](https://github.com/OlegShotyk/TicTacToe/actions/workflows/tests.yml)
+
 A Tic-Tac-Toe desktop game in Python with Tkinter.
 
 - **Two players** on one computer, or **vs. computer**
