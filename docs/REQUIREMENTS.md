@@ -51,7 +51,7 @@ Status: ✅ covered and passing · ❌ covered, test fails because of an open bu
 | R11 | **`test_ai_exhaustive.py::test_hard_ai_never_loses_any_possible_game`** (every possible game, AI first and second), `test_properties.py::test_hard_keeps_the_best_achievable_result`, `test_main.py::TestChooseComputerMoveHard`, `test_main.py::TestMinimax` | | ✅ |
 | R12 | `test_game_flow.py::TestSetupNewRound::test_reset_starts_a_new_round` | | ✅ |
 | R13 | `test_game_flow.py::TestOnClick`, `test_known_bugs.py::test_new_game_during_computer_delay_leaves_board_empty`, `test_known_bugs.py::test_menu_during_computer_delay_raises_no_error` | Charter C1 | ❌ [#1](https://github.com/OlegShotyk/TicTacToe/issues/1), [#2](https://github.com/OlegShotyk/TicTacToe/issues/2) |
-| N1 | - | Charter C3; CI matrix planned | ⏳ [#4](https://github.com/OlegShotyk/TicTacToe/issues/4) |
+| N1 | `test_gui_smoke.py` on the CI matrix (Windows, macOS, Linux × Python 3.10/3.12/3.14) | Charter C3 | ❌ Linux: [#4](https://github.com/OlegShotyk/TicTacToe/issues/4); ✅ Windows, macOS |
 | N2 | - | Charter C2 (measured 0.73 s); pytest-benchmark planned | ❌ [#3](https://github.com/OlegShotyk/TicTacToe/issues/3) |
 | N3 | Message assertions in `test_game_flow.py` | Visual review of all screens | ✅ 🔍 |
 | N4 | `test_known_bugs.py::test_menu_during_computer_delay_raises_no_error` | Charter C1 | ❌ [#2](https://github.com/OlegShotyk/TicTacToe/issues/2) |

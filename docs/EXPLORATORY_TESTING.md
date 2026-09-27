@@ -11,7 +11,7 @@ for new automated tests.
 |---|---|---|
 | C1 | Explore **interrupting the computer's turn** (New game, Menu, extra clicks during the 400 ms delay) to discover state corruption and errors. | Done - session 1 |
 | C2 | Explore **Hard difficulty responsiveness**, especially when the computer moves first, to discover UI freezes. | Done - session 1 |
-| C3 | Explore **platform-specific code** (colours, fonts, window APIs) to discover what breaks outside Windows. | Code review done; execution on Linux/macOS pending |
+| C3 | Explore **platform-specific code** (colours, fonts, window APIs) to discover what breaks outside Windows. | Done - confirmed by CI |
 | C4 | Explore **AI behaviour in unusual positions** with generated boards to discover wrong or surprising moves. | Done - session 1 (via Hypothesis) |
 | C5 | Explore **usability and accessibility**: keyboard only, high-DPI scaling, window focus, pop-up behaviour, repeated rounds. | Not started |
 
@@ -52,7 +52,7 @@ with a 200 ms budget is planned (requirement N2).
 
 | Finding | Status |
 |---|---|
-| `btn.config(bg="SystemButtonFace")` in `setup_new_round`: a Windows-only system colour name. On X11 Tk it is expected to raise `unknown color name`, which would crash *Start game*. | Filed as **[#4](https://github.com/OlegShotyk/TicTacToe/issues/4)** with `[Needs verification]`: no Linux/macOS machine was available. It will be verified by the CI matrix. |
+| `btn.config(bg="SystemButtonFace")` in `setup_new_round`: a Windows-only system colour name. On X11 Tk it is expected to raise `unknown color name`, which would crash *Start game*. | Filed as **[#4](https://github.com/OlegShotyk/TicTacToe/issues/4)**, first as `[Needs verification]`. **Confirmed by CI on 2026-09-27:** Ubuntu (Tk 8.6.14) fails with `TclError: unknown color name "SystemButtonFace"` on *Start game*; macOS and Windows are fine. Severity raised to Critical (Linux). |
 | Font "Arial" | Not a crash risk: Tk falls back to a default font. The look may differ; check visually on Linux. |
 
 ### C4 - AI in unusual positions (Hypothesis)
@@ -81,4 +81,4 @@ with a 200 ms budget is planned (requirement N2).
 
 | Bugs found | Confirmed | Needs verification | Observations |
 |---|---|---|---|
-| 4 | 3 (#1, #2, #3) | 1 (#4) | 1 (lost-position behaviour of Hard AI) |
+| 4 | 4 (#1, #2, #3; #4 confirmed later by CI) | 0 | 1 (lost-position behaviour of Hard AI) |

@@ -37,7 +37,7 @@ traceability to the tests that cover them.
 | Wrong winner / missed draw | High | Low | Unit + property-based tests of `check_winner`, `make_move` |
 | Hard AI can be beaten | High (the feature's promise) | Low | **Exhaustive** test over every possible game |
 | Race between GUI callbacks (delayed computer move vs. New game / Menu) | High | **Confirmed** (#1, #2) | Exploratory testing, regression tests with a real Tk loop |
-| Crash on non-Windows platforms | Critical | Suspected (#4) | Cross-platform CI matrix (planned) |
+| Crash on non-Windows platforms | Critical | **Confirmed on Linux** (#4) | Cross-platform CI matrix + GUI smoke tests |
 | UI freezes during Hard AI thinking | Medium | **Confirmed** (#3) | Performance test with a time budget (planned) |
 | Result logic depends on message text | Medium | Present in design | Unit tests of every end-of-round message; refactoring proposal |
 
@@ -50,10 +50,10 @@ The test pyramid for this project:
 | **Unit** | Pure game logic and single methods | pytest; GUI replaced by stubs (`tests/helpers.py`), no window opened | Done |
 | **Exhaustive** | "Hard AI never loses" | Explore every legal human move sequence, AI moving first and second (`tests/test_ai_exhaustive.py`) | Done |
 | **Property-based** | Rules that must hold for *any* reachable position | Hypothesis generates random legal positions (`tests/test_properties.py`) | Done |
-| **Component (GUI)** | Real Tk widgets and event loop, no human | Hidden `tk.Tk()`, `button.invoke()`, event pumping (`tests/test_known_bugs.py`); to be extended with a fake clock | Started |
+| **Component (GUI)** | Real Tk widgets and event loop, no human | Hidden `tk.Tk()`, buttons found by their text and `invoke()`d, event pumping (`tests/test_gui_smoke.py`, `tests/test_known_bugs.py`); to be extended with a fake clock | Started |
 | **End-to-end** | App launched as a separate process and driven like a user | pywinauto (Windows), 2-3 smoke scenarios | Planned |
 | **Exploratory (manual)** | Timing, usability, look and feel, unexpected sequences | Time-boxed charters, see [EXPLORATORY_TESTING.md](EXPLORATORY_TESTING.md) | Session 1 done |
-| **Non-functional** | Performance, platforms, accessibility | pytest-benchmark; GitHub Actions on Windows/macOS/Linux; manual keyboard review | Planned |
+| **Non-functional** | Performance, platforms, accessibility | GitHub Actions on Windows/macOS/Linux (done); pytest-benchmark; manual keyboard review | Partly done |
 
 Principles:
 
@@ -70,8 +70,12 @@ Principles:
 | | Now | Target (CI) |
 |---|---|---|
 | OS | Windows 10 | Windows, macOS, Ubuntu (Linux with Xvfb virtual display) |
-| Python | 3.14 | 3.10 - 3.14 |
-| Tk | 8.6.15 | as shipped with each Python build |
+| Python | 3.14 | 3.10, 3.12, 3.14 |
+| Tk | 8.6.15 | as shipped with each Python build (8.6.14 on Ubuntu) |
+
+CI: [`.github/workflows/tests.yml`](../.github/workflows/tests.yml) runs the
+whole suite on every push to `main` and every pull request: 3 OS × 3 Python
+versions, branch coverage in the job summary, JUnit XML results as artifacts.
 
 ## 5. Tools
 
@@ -79,11 +83,11 @@ Principles:
 |---|---|
 | Test runner, fixtures, parametrization, monkeypatching | pytest |
 | Property-based testing | Hypothesis |
-| Coverage (planned) | pytest-cov, branch coverage |
+| Coverage | pytest-cov, branch coverage (98% of `main.py`) |
 | Mutation testing (planned) | mutmut |
 | Performance (planned) | pytest-benchmark |
 | GUI end-to-end (planned) | pywinauto |
-| CI (planned) | GitHub Actions |
+| CI | GitHub Actions |
 | Defect tracking | GitHub Issues, using the bug report template in `.github/ISSUE_TEMPLATE` |
 
 ## 6. Defect management
@@ -104,7 +108,7 @@ the existing suite passes locally.
 1. All automated tests pass (`xfail` tests only for open, linked issues).
 2. Every requirement in `REQUIREMENTS.md` touched by the change has at least one test.
 3. No open Critical or Major bug in the changed area.
-4. (Once CI exists) the build is green on all three operating systems.
+4. The CI build is green on all three operating systems.
 
 ## 8. Deliverables
 
@@ -112,14 +116,14 @@ the existing suite passes locally.
   [EXPLORATORY_TESTING.md](EXPLORATORY_TESTING.md) (charters + session notes).
 - Automated tests in `tests/`.
 - Bug reports in GitHub Issues.
-- Test results as CI artifacts (planned).
+- Test results and coverage as CI artifacts / job summary.
 
 ## 9. Roadmap
 
 1. ~~Strategy and requirements~~
 2. ~~Exploratory session 1, file bugs~~
 3. ~~Unit, property-based and exhaustive AI tests~~
-4. GitHub Actions: OS × Python matrix, coverage report
+4. ~~GitHub Actions: OS × Python matrix, coverage report~~
 5. Refactoring proposal: separate `GameEngine` from the Tk GUI
 6. Component GUI tests with a fake clock for `after()`
 7. Performance test (Hard AI move under 200 ms) and mutation testing
