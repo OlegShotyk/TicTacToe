@@ -10,31 +10,7 @@ import random
 import pytest
 
 from main import TicTacToe, WIN_LINES
-
-
-class StubWidget:
-    """Minimal stand-in for a tk.Button / tk.Label: records config() calls."""
-
-    def __init__(self):
-        self.config_calls = []
-
-    def config(self, **kwargs):
-        self.config_calls.append(kwargs)
-
-
-def make_game(mode="PVP", human_mark="X", computer_mark="O", difficulty="medium",
-              board=None, current_player="X"):
-    game = object.__new__(TicTacToe)
-    game.board = board if board is not None else [""] * 9
-    game.current_player = current_player
-    game.buttons = [StubWidget() for _ in range(9)]
-    game.status_label = StubWidget()
-    game.game_over = False
-    game.mode = mode
-    game.difficulty = difficulty
-    game.human_mark = human_mark
-    game.computer_mark = computer_mark
-    return game
+from tests.helpers import make_game
 
 
 # ---------- check_winner ----------
